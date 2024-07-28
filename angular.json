@@ -17,7 +17,8 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/pool-timer",
+            "outputPath": "docs",
+            "baseHref": "/pool-timer/",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
