@@ -10,23 +10,4 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'pool-timer';
-
-  public timer:number = 0;
-  private intervalId: any;
-
-  startTimer(){
-    this.timer = 0;
-
-    if(this.intervalId){
-      clearInterval(this.intervalId);
-    }
-
-    this.intervalId=setInterval(() => {
-      this.timer++;
-    }, 1000);
-  }
-
-  stopTimer(){
-    clearInterval(this.intervalId);
-  }
 }
