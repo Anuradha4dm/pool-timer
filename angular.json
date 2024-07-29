@@ -21,7 +21,12 @@
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
-              "zone.js"
+              "zone.js",
+              "core-js/es/array",
+              "core-js/es/object",
+              "core-js/es/promise",
+              "core-js/es/string",
+              "core-js/es/symbol"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
