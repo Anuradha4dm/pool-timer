@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { COMMON_VARS } from '../env/comman-vars';
+import { MqttClientService } from './services/mqtt-client.service';
+import { TimerHandlerService } from './services/timer-handler.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -9,37 +12,52 @@ import { COMMON_VARS } from '../env/comman-vars';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy{
   title = 'pool-timer';
 
   public timer:number = COMMON_VARS.TIMER_VALUE;
-  private intervalId: any;
+  private subscription!: Subscription;
 
 
-  constructor() {
-  }
+  constructor(
+    private mqttClientService: MqttClientService,
+    private timerHanlderService: TimerHandlerService
+  ) { }
 
-  startTimer(){
-    this.timer = COMMON_VARS.TIMER_VALUE;
+  public ngOnInit(): void {
+    this.mqttClientService.connect()
 
-    if(this.intervalId){
-      clearInterval(this.intervalId);
+    if(this.subscription){
+      this. subscription.unsubscribe();
     }
 
-    this.intervalId=setInterval(() => {
-      this.timer--;
-      if(this.timer==5){
+   this.subscription=this.timerHanlderService.timerSubject.subscribe((countdown: number)=>{
+    this.timer=countdown;
+   });
+  }
 
-      }
+  public ngOnDestroy(): void {
+    this.mqttClientService.disconnect();
+    this.subscription.unsubscribe();
+  }
 
-      if(this.timer==0){
-        clearInterval(this.intervalId);
-      }
+  public triggerWebSocketMessage():void{
+    this.mqttClientService.publish('ifs-sports-day', 'my test data');
+  }
 
-    }, 1000);
+
+  startTimer(){  
+
   }
 
   stopTimer(){
-    clearInterval(this.intervalId);
+    this.subscription.unsubscribe();
+    this.timerHanlderService.allUnsubscribe();
+  }
+
+
+
+  public newWebSocker():void{
+    return 
   }
 }
