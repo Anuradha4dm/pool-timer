@@ -40,7 +40,7 @@ export class MqttClientService {
         this.timerHandlerService.timerStart();
       }
 
-      if(message.payloadString==='restart'){
+      if(message.payloadString==='reset'){
         this.timerHandlerService.timerStart(of(0),true);
       }
 
