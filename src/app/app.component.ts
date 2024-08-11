@@ -31,7 +31,7 @@ export class AppComponent implements OnInit, OnDestroy{
       this. subscription.unsubscribe();
     }
 
-   this.subscription=this.timerHanlderService.timerSubject.subscribe((countdown: number)=>{
+   this.subscription=this.timerHanlderService.timerSubject$.subscribe((countdown: number)=>{
     this.timer=countdown;
    });
 

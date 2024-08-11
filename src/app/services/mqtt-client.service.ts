@@ -20,6 +20,7 @@ export class MqttClientService {
   public connect(topicClient: string): void {
     this.client.connect({
       useSSL: true,
+      reconnect: true,
       onSuccess: () => {
         console.log('connection was success');
         this.isConnectionLive=true;
@@ -40,7 +41,7 @@ export class MqttClientService {
         this.timerHandlerService.timerStart();
       }
 
-      if(message.payloadString==='restart'){
+      if(message.payloadString==='reset'){
         this.timerHandlerService.timerStart(of(0),true);
       }
 
