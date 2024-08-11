@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { COMMON_VARS } from '../env/comman-vars';
 import { MqttClientService } from './services/mqtt-client.service';
@@ -13,6 +13,21 @@ import { DialogService } from './services/dialog.service';
 })
 export class AppComponent implements OnInit, OnDestroy{
   title = 'pool-timer';
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent){
+    if(event.key==='1'){
+      this.startTimer();
+    }
+
+    if(event.key==='2'){
+      this.stopTimer();
+    }
+
+    if(event.key==='3'){
+      this.resetTimer();
+    }
+  }
 
   public timer:number = COMMON_VARS.TIMER_VALUE;
   private subscription!: Subscription;
