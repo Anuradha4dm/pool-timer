@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Client, Message } from 'paho-mqtt';
 import * as CryptoPack from 'crypto-js';
 import { TimerHandlerService } from "./timer-handler.service";
+import { of } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
 export class MqttClientService {
@@ -37,6 +38,10 @@ export class MqttClientService {
       console.log('MQTT message received:', message.payloadString);
       if(message.payloadString==='start'){
         this.timerHandlerService.timerStart();
+      }
+
+      if(message.payloadString==='restart'){
+        this.timerHandlerService.timerStart(of(0),true);
       }
 
       if(message.payloadString==='stop'){
