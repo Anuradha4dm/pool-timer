@@ -20,6 +20,7 @@ export class MqttClientService {
   public connect(topicClient: string): void {
     this.client.connect({
       useSSL: true,
+      reconnect: true,
       onSuccess: () => {
         console.log('connection was success');
         this.isConnectionLive=true;

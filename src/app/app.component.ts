@@ -3,7 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { COMMON_VARS } from '../env/comman-vars';
 import { MqttClientService } from './services/mqtt-client.service';
 import { TimerHandlerService } from './services/timer-handler.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { DialogService } from './services/dialog.service';
 
 @Component({
@@ -31,7 +31,7 @@ export class AppComponent implements OnInit, OnDestroy{
       this. subscription.unsubscribe();
     }
 
-   this.subscription=this.timerHanlderService.timerSubject.subscribe((countdown: number)=>{
+   this.subscription=this.timerHanlderService.timerSubject$.subscribe((countdown: number)=>{
     this.timer=countdown;
    });
 
@@ -51,12 +51,15 @@ export class AppComponent implements OnInit, OnDestroy{
 
 
   startTimer(){  
-
+    this.timerHanlderService.timerStart();
   }
 
   stopTimer(){
-    this.subscription.unsubscribe();
-    this.timerHanlderService.allUnsubscribe();
+   this.timerHanlderService.allUnsubscribe();
+  }
+
+  resetTimer(){
+    this.timerHanlderService.timerStart(of(0),true);
   }
 
   public toggleDialogBox(): void{

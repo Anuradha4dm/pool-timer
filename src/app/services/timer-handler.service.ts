@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { COMMON_VARS } from "../../env/comman-vars";
-import { BehaviorSubject, interval, map, Observable, of, Subject, Subscription, switchMap, take, timeInterval } from "rxjs";
+import { BehaviorSubject, filter, interval, map, Observable, of, Subject, Subscription, switchMap, take, timeInterval } from "rxjs";
 
 export type TimerType= 'START' | 'RESUME' 
 
@@ -11,11 +11,13 @@ export class TimerHandlerService{
     private subscription!: Subscription;
     private timerPausedValue: number=0;
 
-    public timerSubject: Subject<number>= new Subject<number>()
+    private timerSubject: Subject<number>= new Subject<number>();
+    public timerSubject$: Observable<number>=this.timerSubject.asObservable();
+
     private timerStartValue: BehaviorSubject<number>=new BehaviorSubject<number>(COMMON_VARS.TIMER_VALUE);
     public timerStartValue$: Observable<number>=this.timerStartValue.asObservable();
     
-    public timerStart(timer$: Observable<number>= this.timerStartValue, isReset: boolean =false): void{
+    public timerStart(timer$: Observable<number>= this.timerStartValue$, isReset: boolean =false): void{
        
         if(this.subscription){
             this.subscription.unsubscribe();
@@ -41,10 +43,12 @@ export class TimerHandlerService{
         this.subscription= timerValueObv$.pipe(
             switchMap((countdown: number) => {
                 return interval(1000).pipe(
-                    take(countdown + 1),
+                    take(countdown),
                     map((value: number) => {
                         console.log(value, countdown - value);
-                        this.timerPausedValue=countdown - value
+
+                        this.timerPausedValue=countdown - (value+1)
+
                         return  this.timerPausedValue;
                     })
                 );
@@ -61,6 +65,7 @@ export class TimerHandlerService{
     public changeTimerStartValue(timer: number): void{
         this.timerStartValue.next(timer);
         this.timerPausedValue=0;
+
         if(this.subscription){
             this.subscription.unsubscribe();
         }
