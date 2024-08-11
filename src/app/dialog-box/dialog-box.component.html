@@ -1,0 +1,22 @@
+<div class="dialog-container">
+    <div class="dialog-header">
+        <h1>Configuration</h1>
+    </div>
+
+    <div class="input-controllers">
+        <div class="input-group">
+            <label for="client-id">MQTT Topic</label>
+            <input type="text" id="client-id" name="client-id" [(ngModel)]="topic">
+        </div>
+        
+        <div class="input-group">
+            <label for="time">Time</label>
+            <input type="number" id="time" name="time" [(ngModel)]="timerValue">
+        </div>
+    </div>
+
+    <div class="button-group">
+        <button class="apply-button" (click)="apply()">Apply</button>
+        <button class="cancel-button" (click)="closeDialog()">Cancel</button>
+    </div>
+</div>
