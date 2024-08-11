@@ -3,12 +3,11 @@ import { RouterOutlet } from '@angular/router';
 import { COMMON_VARS } from '../env/comman-vars';
 import { MqttClientService } from './services/mqtt-client.service';
 import { TimerHandlerService } from './services/timer-handler.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { DialogService } from './services/dialog.service';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -18,14 +17,15 @@ export class AppComponent implements OnInit, OnDestroy{
   public timer:number = COMMON_VARS.TIMER_VALUE;
   private subscription!: Subscription;
 
+  public isDialogOpen:boolean=false;
 
   constructor(
     private mqttClientService: MqttClientService,
-    private timerHanlderService: TimerHandlerService
+    private timerHanlderService: TimerHandlerService,
+    private dialogService: DialogService
   ) { }
 
   public ngOnInit(): void {
-    this.mqttClientService.connect()
 
     if(this.subscription){
       this. subscription.unsubscribe();
@@ -34,6 +34,10 @@ export class AppComponent implements OnInit, OnDestroy{
    this.subscription=this.timerHanlderService.timerSubject.subscribe((countdown: number)=>{
     this.timer=countdown;
    });
+
+   this.timerHanlderService.timerStartValue$.subscribe((timerValue)=>{
+    this.timer=timerValue;
+  });
   }
 
   public ngOnDestroy(): void {
@@ -55,9 +59,12 @@ export class AppComponent implements OnInit, OnDestroy{
     this.timerHanlderService.allUnsubscribe();
   }
 
-
-
-  public newWebSocker():void{
-    return 
+  public toggleDialogBox(): void{
+    this.dialogService.toggleDialogBox()
   }
+
+  public getDialogOpenState(): Observable<boolean>{
+    return this.dialogService.isDialogOpen$;
+  }
+
 }

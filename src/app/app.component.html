@@ -2,6 +2,10 @@
     <div class="background-image">
     </div>
 
+    <div class="menu-icon" (click)="toggleDialogBox()">
+        &#9776;
+    </div>
+
     <div class="display-container">
         <div class="timer-container">
             <div class="timer-values">
@@ -14,4 +18,10 @@
              <button type="button" (click)="stopTimer()">Stop Timer</button>
         </div>
     </div>
+
+    <div class="dialog-box-placeholder" *ngIf="getDialogOpenState() | async">
+        <dialog-box></dialog-box>
+    </div>
+
+    <div class="dialog-backdrop" *ngIf="getDialogOpenState() | async"></div>
 </div>
